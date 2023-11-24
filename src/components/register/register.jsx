@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import "../styles/form.scss";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { parseErrors } from "../../utils/parseErrors";
 
 export default function register() {
   const [firstName, setFirstName] = useState("");
@@ -9,8 +11,38 @@ export default function register() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  const handleSubmit = async (e) => {
+    e.preventDefault(); //prevent default form submission (form auto loads itself after submission)
+
+    const data = {
+      firstName,
+      lastName,
+      email,
+      password,
+      username: email,
+    };
+
+    try {
+      //make a post request to the backend api
+      const res = await axios.post(
+        "http://localhost:1337/api/auth/local/register",
+        data
+      );
+      //reset out state
+      setFirstName("");
+      setLastName("");
+      setEmail("");
+      setPassword("");
+      setConfirmPassword("");
+    } catch (err) {
+      // console.log(err.response.data); //the data here is that of the error message stx
+      console.log(parseErrors(err));
+      // console.log(err);
+    }
+  };
+
   return (
-    <div className="form form--page">
+    <form className="form form--page" onSubmit={handleSubmit}>
       <div className="form__group form__group--page">
         <label className="form__label">First name</label>
         <input
@@ -48,7 +80,7 @@ export default function register() {
         <label className="form__label">Choose password</label>
         <input
           className="form__field"
-          type="text"
+          type="password" //this ensures it is encrypted
           placeholder="Choose password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
@@ -59,10 +91,10 @@ export default function register() {
         <label className="form__label">Confirm Password</label>
         <input
           className="form__field"
-          type="text"
+          type="password" //this ensures it is encrypted
           placeholder="Confirm Password"
           value={confirmPassword}
-          onChange={(e) => set(e.target.value)}
+          onChange={(e) => setConfirmPassword(e.target.value)}
         />
       </div>
 
@@ -73,6 +105,6 @@ export default function register() {
       <footer>
         Already have an account? <Link to="/login">Login</Link>
       </footer>
-    </div>
+    </form>
   );
 }
