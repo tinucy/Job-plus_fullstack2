@@ -5,7 +5,7 @@ export const parseErrors = (err) => {
   if (err?.response?.data?.error?.name === "ValidationError") {
     return {
       message: err.response.data.error.message,
-      details: err.response.data.error.details,
+      details: err.response.data.error.details.errors,
     };
   }
 
@@ -26,6 +26,7 @@ export const parseErrors = (err) => {
   }
   //could we have used else if or else here
   return {
-    message: "AN unexpected error occured. Contact support",
+    message: "An unexpected error occured. Contact support",
+    details: [],
   };
 };
