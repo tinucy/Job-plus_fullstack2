@@ -25,7 +25,7 @@ function App() {
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/saved-jobs" element={<SavedJobPage />} />
       <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-      <Route path="/reset-password" element={<RestPasswordPage />} />
+      <Route path="/reset-password" element={<ResetPasswordPage />} />
     </Routes>
   );
 }
